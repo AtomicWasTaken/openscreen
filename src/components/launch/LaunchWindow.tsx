@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import styles from "./LaunchWindow.module.css";
 import { useScreenRecorder } from "../../hooks/useScreenRecorder";
 import { Button } from "../ui/button";
 import { BsRecordCircle } from "react-icons/bs";
 import { FaRegStopCircle } from "react-icons/fa";
 import { MdMonitor } from "react-icons/md";
+import { cn } from "@/lib/utils";
 
 export function LaunchWindow() {
   const { recording, toggleRecording } = useScreenRecorder();
@@ -31,11 +31,6 @@ export function LaunchWindow() {
     return () => clearInterval(interval);
   }, []);
 
-  const truncateText = (text: string, maxLength: number = 6) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + "...";
-  };
-
   const openSourceSelector = () => {
     if (window.electronAPI) {
       window.electronAPI.openSourceSelector();
@@ -43,47 +38,49 @@ export function LaunchWindow() {
   };
 
   return (
-    <div className="w-full h-full flex items-center bg-transparent">
+    <div className="w-full h-full flex items-center justify-center bg-transparent">
       <div
-        className={`w-full max-w-2xl mx-auto flex items-center justify-between px-3 py-1.5 ${styles.electronDrag}`}
-        style={{
-          borderRadius: 14,
-          background: 'linear-gradient(135deg, rgba(30,30,40,0.85) 0%, rgba(20,20,30,0.75) 100%)',
-          backdropFilter: 'blur(24px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-          boxShadow: '0 4px 16px 0 rgba(0,0,0,0.24), 0 1px 3px 0 rgba(0,0,0,0.12) inset',
-          border: '1px solid rgba(80,80,120,0.18)',
-          minHeight: 36,
-        }}
+        className="w-full max-w-full mx-auto flex items-center gap-4 px-6 py-4 rounded-xl bg-black border border-white/10 shadow-lg min-w-0"
+        style={{ 
+          WebkitAppRegion: 'drag',
+        } as React.CSSProperties}
       >
         <Button
-          variant="link"
+          variant="ghost"
           size="sm"
-          className={`gap-1 text-white bg-transparent hover:bg-transparent px-0 flex-1 text-left text-xs ${styles.electronNoDrag}`}
+          className={cn(
+            "gap-2 text-white hover:bg-white/10 px-4 py-2 flex-1 min-w-0 justify-start text-sm rounded-lg",
+            "transition-all"
+          )}
+          style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
           onClick={openSourceSelector}
         >
-          <MdMonitor size={13} className="text-white" />
-          {truncateText(selectedSource)}
+          <MdMonitor size={16} className="flex-shrink-0" />
+          <span className="font-medium truncate min-w-0">{selectedSource}</span>
         </Button>
 
-        <div className="w-px h-5 bg-white/30" />
+        <div className="w-px h-8 bg-white/10 flex-shrink-0" />
 
         <Button
-          variant="link"
+          variant={recording ? "default" : hasSelectedSource ? "outline" : "ghost"}
           size="sm"
           onClick={hasSelectedSource ? toggleRecording : openSourceSelector}
           disabled={!hasSelectedSource && !recording}
-          className={`gap-1 bg-transparent hover:bg-transparent px-0 flex-1 text-right text-xs ${styles.electronNoDrag}`}
+          className={cn(
+            "gap-2 px-4 py-2 flex-shrink-0 justify-end text-sm rounded-lg transition-all",
+            !hasSelectedSource && !recording && "text-white/40"
+          )}
+          style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
         >
           {recording ? (
             <>
-              <FaRegStopCircle size={13} className="text-red-400" />
-              <span className="text-red-400">Stop</span>
+              <FaRegStopCircle size={16} className="flex-shrink-0" />
+              <span className="font-medium">Stop</span>
             </>
           ) : (
             <>
-              <BsRecordCircle size={13} className={hasSelectedSource ? "text-white" : "text-white/50"} />
-              <span className={hasSelectedSource ? "text-white" : "text-white/50"}>Record</span>
+              <BsRecordCircle size={16} className="flex-shrink-0" />
+              <span className="font-medium">Record</span>
             </>
           )}
         </Button>

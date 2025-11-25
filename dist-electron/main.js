@@ -8,15 +8,15 @@ const VITE_DEV_SERVER_URL$1 = process.env["VITE_DEV_SERVER_URL"];
 const RENDERER_DIST$1 = path.join(APP_ROOT, "dist");
 function createHudOverlayWindow() {
   const win = new BrowserWindow({
-    width: 250,
+    width: 300,
     height: 80,
-    minWidth: 250,
-    maxWidth: 250,
+    minWidth: 400,
+    maxWidth: 800,
     minHeight: 80,
-    maxHeight: 80,
+    maxHeight: 120,
     frame: false,
     transparent: true,
-    resizable: false,
+    resizable: true,
     alwaysOnTop: true,
     skipTaskbar: true,
     hasShadow: false,

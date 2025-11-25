@@ -28,6 +28,7 @@
     "lucide-react": "^0.545.0",
     "mediabunny": "^1.25.1",
     "mp4box": "^2.2.0",
+    "node-gyp-build": "^4.8.4",
     "pixi.js": "^8.14.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

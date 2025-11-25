@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { MdCheck } from "react-icons/md";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Card } from "../ui/card";
-import styles from "./SourceSelector.module.css";
+import { cn } from "@/lib/utils";
 
 interface DesktopSource {
   id: string;
@@ -58,87 +58,97 @@ export function SourceSelector() {
 
   if (loading) {
     return (
-      <div className={`h-full flex items-center justify-center ${styles.glassContainer}`} style={{ minHeight: '100vh' }}>
+      <div className="h-full flex items-center justify-center bg-black/90 backdrop-blur-xl rounded-xl shadow-2xl border border-white/10 p-6" style={{ minHeight: '100vh' }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-zinc-600 mx-auto mb-2" />
-          <p className="text-xs text-zinc-300">Loading sources...</p>
+          <div className="animate-spin rounded-full h-6 w-6 border-2 border-white/20 border-t-white mx-auto mb-2" />
+          <p className="text-xs text-white/70">Loading sources...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center ${styles.glassContainer}`}>
-      <div className="flex-1 flex flex-col w-full max-w-xl" style={{ padding: 0 }}>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-black/90 backdrop-blur-xl rounded-xl shadow-2xl border border-white/10 p-6">
+      <div className="flex-1 flex flex-col w-full max-w-xl min-w-0">
         <Tabs defaultValue="screens">
-          <TabsList className="grid grid-cols-2 mb-3 bg-zinc-900/40 rounded-full">
-            <TabsTrigger value="screens" className="data-[state=active]:bg-[#34B27B] data-[state=active]:text-white text-zinc-200 rounded-full text-xs py-1">Screens</TabsTrigger>
-            <TabsTrigger value="windows" className="data-[state=active]:bg-[#34B27B] data-[state=active]:text-white text-zinc-200 rounded-full text-xs py-1">Windows</TabsTrigger>
+          <TabsList className="mb-4 bg-white/5 border border-white/10 p-1 w-full grid grid-cols-2 h-auto rounded-lg">
+            <TabsTrigger value="screens" className="data-[state=active]:bg-white data-[state=active]:text-black text-white/60 py-2 rounded-md transition-all text-sm w-full">Screens</TabsTrigger>
+            <TabsTrigger value="windows" className="data-[state=active]:bg-white data-[state=active]:text-black text-white/60 py-2 rounded-md transition-all text-sm w-full">Windows</TabsTrigger>
           </TabsList>
             <div className="h-60 flex flex-col justify-stretch">
             <TabsContent value="screens" className="h-full">
-              <div className="grid grid-cols-2 gap-2 h-full overflow-y-auto pr-1 relative">
+              <div className="grid grid-cols-2 gap-4 h-full overflow-y-auto relative">
                 {screenSources.map(source => (
                   <Card
                     key={source.id}
-                    className={`${styles.sourceCard} ${selectedSource?.id === source.id ? styles.selected : ''} cursor-pointer h-fit p-2 scale-95`}
-                    style={{ margin: 8, width: '90%', maxWidth: 220 }}
+                    className={cn(
+                      "cursor-pointer h-fit p-2 rounded-lg border transition-all",
+                      selectedSource?.id === source.id 
+                        ? 'border-white bg-white/10' 
+                        : 'border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20'
+                    )}
+                    style={{ margin: 0, width: '100%' }}
                     onClick={() => handleSourceSelect(source)}
                   >
-                    <div className="p-1">
-                      <div className="relative mb-1">
+                    <div className="p-2">
+                      <div className="relative mb-3">
                         <img
                           src={source.thumbnail || ''}
                           alt={source.name}
-                          className="w-full aspect-video object-cover rounded border border-zinc-800"
+                          className="w-full aspect-video object-cover rounded-lg border border-white/10"
                         />
                         {selectedSource?.id === source.id && (
                           <div className="absolute -top-1 -right-1">
-                            <div className="w-4 h-4 bg-[#34B27B] rounded-full flex items-center justify-center shadow-md">
-                              <MdCheck className={styles.icon} />
+                            <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-black">
+                              <MdCheck className="w-3 h-3 text-black" />
                             </div>
                           </div>
                         )}
                       </div>
-                      <div className={styles.name + " truncate"}>{source.name}</div>
+                      <div className="text-sm font-medium text-white truncate min-w-0">{source.name}</div>
                     </div>
                   </Card>
                 ))}
               </div>
             </TabsContent>
             <TabsContent value="windows" className="h-full">
-              <div className="grid grid-cols-2 gap-2 h-full overflow-y-auto pr-1 relative">
+              <div className="grid grid-cols-2 gap-4 h-full overflow-y-auto relative">
                 {windowSources.map(source => (
                   <Card
                     key={source.id}
-                    className={`${styles.sourceCard} ${selectedSource?.id === source.id ? styles.selected : ''} cursor-pointer h-fit p-2 scale-95`}
-                    style={{ margin: 8, width: '90%', maxWidth: 220 }}
+                    className={cn(
+                      "cursor-pointer h-fit p-2 rounded-lg border transition-all",
+                      selectedSource?.id === source.id 
+                        ? 'border-white bg-white/10' 
+                        : 'border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20'
+                    )}
+                    style={{ margin: 0, width: '100%' }}
                     onClick={() => handleSourceSelect(source)}
                   >
-                    <div className="p-1">
-                      <div className="relative mb-1">
+                    <div className="p-2">
+                      <div className="relative mb-3">
                         <img
                           src={source.thumbnail || ''}
                           alt={source.name}
-                          className="w-full aspect-video object-cover rounded border border-gray-700"
+                          className="w-full aspect-video object-cover rounded-lg border border-white/10"
                         />
                         {selectedSource?.id === source.id && (
                           <div className="absolute -top-1 -right-1">
-                            <div className="w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center shadow-md">
-                              <MdCheck className={styles.icon} />
+                            <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-black">
+                              <MdCheck className="w-3 h-3 text-black" />
                             </div>
                           </div>
                         )}
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-2 min-w-0">
                         {source.appIcon && (
                           <img
                             src={source.appIcon}
                             alt="App icon"
-                            className={styles.icon + " flex-shrink-0"}
+                            className="w-4 h-4 flex-shrink-0"
                           />
                         )}
-                        <div className={styles.name + " truncate"}>{source.name}</div>
+                        <div className="text-sm font-medium text-white truncate min-w-0">{source.name}</div>
                       </div>
                     </div>
                   </Card>
@@ -148,10 +158,10 @@ export function SourceSelector() {
           </div>
         </Tabs>
       </div>
-      <div className="border-t border-zinc-800 p-2 w-full max-w-xl">
-        <div className="flex justify-center gap-2">
-          <Button variant="outline" onClick={() => window.close()} className="px-4 py-1 text-xs bg-zinc-800 border-zinc-700 text-zinc-200 hover:bg-zinc-700">Cancel</Button>
-          <Button onClick={handleShare} disabled={!selectedSource} className="px-4 py-1 text-xs bg-[#34B27B] text-white hover:bg-[#34B27B]/80 disabled:opacity-50 disabled:bg-zinc-700">Share</Button>
+      <div className="border-t border-white/10 pt-6 w-full max-w-xl">
+        <div className="flex justify-center gap-4">
+          <Button variant="outline" onClick={() => window.close()} size="default">Cancel</Button>
+          <Button onClick={handleShare} disabled={!selectedSource} variant="default" size="default">Share</Button>
         </div>
       </div>
     </div>

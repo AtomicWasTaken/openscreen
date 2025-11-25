@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 import VideoPlayback, { VideoPlaybackRef } from "./VideoPlayback";
 import PlaybackControls from "./PlaybackControls";
@@ -285,15 +286,15 @@ export default function VideoEditor() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-background">
-        <div className="text-foreground">Loading video...</div>
+      <div className="flex items-center justify-center h-screen bg-black text-white">
+        <div className="text-sm font-medium">Loading video...</div>
       </div>
     );
   }
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen bg-background">
-        <div className="text-destructive">{error}</div>
+      <div className="flex items-center justify-center h-screen bg-black text-white">
+        <div className="text-sm font-medium text-white/70">{error}</div>
       </div>
     );
   }
@@ -301,25 +302,20 @@ export default function VideoEditor() {
   const isMac = navigator.userAgent.includes('Mac');
 
   return (
-    <div className="flex flex-col h-screen bg-[#09090b] text-slate-200 overflow-hidden selection:bg-[#34B27B]/30">
-      {/* Drag region for window - more padding on macOS for traffic lights */}
+    <div className="flex flex-col h-screen bg-black text-white overflow-hidden">
       <div 
-        className={`h-10 flex-shrink-0 bg-[#09090b]/80 backdrop-blur-md border-b border-white/5 flex items-center justify-between ${isMac ? 'pl-20 pr-4' : 'px-4'} z-50`}
+        className={cn("h-10 flex-shrink-0 bg-black/80 backdrop-blur-sm border-b border-white/10 flex items-center justify-between z-50", isMac ? 'pl-20 pr-4' : 'px-4')}
         style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
       >
         <div className="flex-1" />
-
       </div>
 
-      <div className="flex-1 p-4 gap-4 flex min-h-0 relative">
-        {/* Left Column - Video & Timeline */}
-        <div className="flex-[7] flex flex-col gap-3 min-w-0 h-full">
-          {/* Video Preview Area */}
-          <div className="flex-shrink-0 bg-black/40 rounded-2xl border border-white/5 shadow-2xl overflow-hidden">
+      <div className="flex-1 p-6 gap-6 flex min-h-0">
+        <div className="flex-[7] flex flex-col gap-6 min-w-0 h-full">
+          <div className="flex-shrink-0 bg-black rounded-xl border border-white/10 overflow-hidden">
             <div className="flex flex-col">
-              {/* Video Container - Fixed aspect ratio */}
-              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}> {/* 16:9 aspect ratio */}
-                <div className="absolute inset-0 flex items-center justify-center p-4">
+              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                <div className="absolute inset-0 flex items-center justify-center p-6">
                   <div className="relative w-full h-full max-w-full max-h-full">
                     <VideoPlayback
                       ref={videoPlaybackRef}
@@ -342,8 +338,7 @@ export default function VideoEditor() {
                 </div>
               </div>
               
-              {/* Playback Controls - Below video */}
-              <div className="px-4 pb-3 pt-2">
+              <div className="px-6 pb-6 pt-4">
                 <PlaybackControls
                   isPlaying={isPlaying}
                   currentTime={currentTime}
@@ -355,8 +350,7 @@ export default function VideoEditor() {
             </div>
           </div>
 
-          {/* Timeline Area */}
-          <div className="flex-1 min-h-[180px] bg-[#09090b] rounded-2xl border border-white/5 shadow-lg overflow-hidden flex flex-col">
+          <div className="flex-1 min-h-[180px] bg-black rounded-xl border border-white/10 overflow-hidden flex flex-col">
             <TimelineEditor
               videoDuration={duration}
               currentTime={currentTime}
@@ -371,7 +365,6 @@ export default function VideoEditor() {
           </div>
         </div>
 
-          {/* Right Column - Settings */}
         <SettingsPanel
           selected={wallpaper}
           onWallpaperChange={setWallpaper}
@@ -390,7 +383,7 @@ export default function VideoEditor() {
         />
       </div>
 
-      <Toaster theme="dark" className="pointer-events-auto" />
+      <Toaster theme="dark" />
       
       <ExportDialog
         isOpen={showExportDialog}

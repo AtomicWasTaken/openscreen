@@ -1,8 +1,7 @@
 import { useItem } from "dnd-timeline";
 import type { Span } from "dnd-timeline";
-import { cn } from "@/lib/utils";
 import { ZoomIn } from "lucide-react";
-import glassStyles from "./ItemGlass.module.css";
+import { cn } from "@/lib/utils";
 
 interface ItemProps {
   id: string;
@@ -42,9 +41,10 @@ export default function Item({ id, span, rowId, isSelected = false, onSelect, zo
       <div style={itemContentStyle}>
         <div
           className={cn(
-            "w-full h-full overflow-hidden flex items-center justify-center gap-1.5 cursor-grab active:cursor-grabbing relative",
-            glassStyles.glassGreen,
-            isSelected && glassStyles.selected
+            "w-full h-full overflow-hidden flex items-center justify-center gap-1.5 cursor-grab active:cursor-grabbing relative rounded-md backdrop-blur-sm transition-all",
+            isSelected
+              ? "bg-white/20 border border-white"
+              : "bg-white/10 border border-white/20 hover:bg-white/15 hover:border-white/20"
           )}
           style={{ height: 48 }}
           onClick={(event) => {
@@ -52,10 +52,9 @@ export default function Item({ id, span, rowId, isSelected = false, onSelect, zo
             onSelect?.();
           }}
         >
-          <div className={cn(glassStyles.zoomEndCap, glassStyles.left)} />
-          <div className={cn(glassStyles.zoomEndCap, glassStyles.right)} />
+          <div className={cn("absolute top-0 bottom-0 w-1 bg-white pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity left-0 rounded-l-md", isSelected && 'opacity-100')} />
+          <div className={cn("absolute top-0 bottom-0 w-1 bg-white pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity right-0 rounded-r-md", isSelected && 'opacity-100')} />
           
-          {/* Content */}
           <div className="relative z-10 flex items-center gap-1.5 text-white/90 opacity-80 group-hover:opacity-100 transition-opacity select-none">
             <ZoomIn className="w-3.5 h-3.5" />
             <span className="text-[11px] font-semibold tracking-tight">
